@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistente de Bienestar - Calculadora IMC Pro+</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .tab-active {
+            background-color: #4f46e5;
+            color: white;
+        }
+        .tab-inactive {
+            background-color: #e0e7ff;
+            color: #4f46e5;
+        }
+        #result {
+            transition: all 0.5s ease-in-out;
+        }
+        .result-hidden {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            margin-top: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .result-visible {
+            opacity: 1;
+            max-height: 1000px; /* Large enough for content */
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen py-12">
+
+    <div class="w-full max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-8 transition-all duration-500">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-gray-800">Tu Asistente de Bienestar</h1>
+            <p class="mt-2 text-gray-600">¡Hola! Juntos, vamos a evaluar tu punto de partida con el IMC y trazar un camino hacia tus metas. ¡Empecemos!</p>
+        </div>
+
+        <!-- Selector de Unidades -->
+        <div class="mt-8 flex justify-center bg-indigo-100 rounded-lg p-1">
+            <button id="metricBtn" class="w-1/2 py-2 px-4 rounded-md font-semibold transition tab-active">Métrico (kg/m)</button>
+            <button id="imperialBtn" class="w-1/2 py-2 px-4 rounded-md font-semibold transition tab-inactive">Imperial (lb/ft)</button>
+        </div>
+
+        <div class="mt-6">
+            <!-- Inputs Métricos -->
+            <div id="metricInputs">
+                <div class="mb-4">
+                    <label for="weight_kg" class="block text-sm font-medium text-gray-700 mb-1">Tu Peso (kg)</label>
+                    <input type="number" id="weight_kg" placeholder="Ej: 70" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+                <div class="mb-4">
+                    <label for="height_m" class="block text-sm font-medium text-gray-700 mb-1">Tu Altura (m)</label>
+                    <input type="number" id="height_m" placeholder="Ej: 1.75" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+            </div>
+            <!-- Inputs Imperiales -->
+            <div id="imperialInputs" class="hidden">
+                 <div class="mb-4">
+                    <label for="weight_lb" class="block text-sm font-medium text-gray-700 mb-1">Tu Peso (lb)</label>
+                    <input type="number" id="weight_lb" placeholder="Ej: 155" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+                <div class="flex gap-4 mb-4">
+                    <div class="w-1/2">
+                        <label for="height_ft" class="block text-sm font-medium text-gray-700 mb-1">Altura (pies)</label>
+                        <input type="number" id="height_ft" placeholder="Ej: 5" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                    </div>
+                    <div class="w-1/2">
+                        <label for="height_in" class="block text-sm font-medium text-gray-700 mb-1">Altura (pulgadas)</label>
+                        <input type="number" id="height_in" placeholder="Ej: 9" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Selector de Estilo de Vida -->
+            <div class="mb-6">
+                <label for="activityLevel" class="block text-sm font-medium text-gray-700 mb-1">Tu nivel de actividad física semanal</label>
+                <select id="activityLevel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-white">
+                    <option value="sedentary">Sedentario (poco o ningún ejercicio)</option>
+                    <option value="light">Ligero (ejercicio 1-3 días)</option>
+                    <option value="moderate">Moderado (ejercicio 3-5 días)</option>
+                    <option value="active">Activo (ejercicio 6-7 días)</option>
+                </select>
+            </div>
+
+            <button id="calculateBtn" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105">
+                Analizar mi Bienestar
+            </button>
+        </div>
+
+        <!-- Área de Resultados Pro+ -->
+        <div id="result" class="text-center result-hidden">
+             <div class="bg-gray-50 p-6 rounded-lg">
+                <h2 class="text-xl font-semibold text-gray-800">Aquí tienes tu análisis profesional:</h2>
+                <p id="imcValue" class="text-6xl font-bold my-3 text-indigo-600"></p>
+                <p id="imcCategory" class="text-lg font-medium rounded-full px-4 py-1 inline-block mb-4"></p>
+
+                <!-- Escala Visual de IMC -->
+                <div class="mt-6">
+                    <h3 class="text-sm font-medium text-gray-600 text-left mb-2">Tu posición en la escala de IMC:</h3>
+                    <div class="relative w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="absolute bg-blue-400 h-2.5 rounded-l-full" style="width: 21.25%; left: 0;"></div>
+                        <div class="absolute bg-green-400 h-2.5" style="width: 37.5%; left: 21.25%;"></div>
+                        <div class="absolute bg-yellow-400 h-2.5" style="width: 28.75%; left: 58.75%;"></div>
+                        <div class="absolute bg-red-400 h-2.5 rounded-r-full" style="width: 12.5%; left: 87.5%;"></div>
+                        <div id="imcMarker" class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-white border-2 border-indigo-600 rounded-full transition-all duration-1000" style="left: 0%;">
+                             <div class="w-full h-full bg-indigo-600 rounded-full scale-50"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1 px-1">
+                        <span>15</span>
+                        <span class="pl-2">18.5</span>
+                        <span class="pl-8">25</span>
+                        <span class="pr-2">30</span>
+                        <span>35+</span>
+                    </div>
+                </div>
+                
+                <!-- Rango de Peso Saludable -->
+                <div class="mt-6 text-left bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h3 class="font-bold text-green-800">🎯 Tu Objetivo de Peso Saludable</h3>
+                    <p id="healthyWeightRange" class="text-green-700 font-medium"></p>
+                </div>
+
+                <p id="imcInterpretation" class="text-gray-700 text-left mt-6"></p>
+                <div class="mt-4 text-left bg-indigo-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-indigo-800">⭐ Mis Recomendaciones Personalizadas:</h3>
+                    <p id="imcRecommendation" class="text-indigo-700"></p>
+                </div>
+            </div>
+            <p id="errorMessage" class="text-red-500 mt-4 font-medium"></p>
+            <p class="text-xs text-gray-500 mt-6 italic">Recuerda: El IMC es una herramienta de referencia y no distingue masa muscular de grasa. Para un análisis completo, consulta a un profesional de la salud.</p>
+        </div>
+    </div>
+
+    <script>
+        const metricBtn = document.getElementById('metricBtn');
+        const imperialBtn = document.getElementById('imperialBtn');
+        const metricInputs = document.getElementById('metricInputs');
+        const imperialInputs = document.getElementById('imperialInputs');
+        const calculateBtn = document.getElementById('calculateBtn');
+        
+        const weightKgInput = document.getElementById('weight_kg');
+        const heightMInput = document.getElementById('height_m');
+        const weightLbInput = document.getElementById('weight_lb');
+        const heightFtInput = document.getElementById('height_ft');
+        const heightInInput = document.getElementById('height_in');
+        const activityLevelSelect = document.getElementById('activityLevel');
+
+        const resultDiv = document.getElementById('result');
+        const imcValueEl = document.getElementById('imcValue');
+        const imcCategoryEl = document.getElementById('imcCategory');
+        const imcInterpretationEl = document.getElementById('imcInterpretation');
+        const imcRecommendationEl = document.getElementById('imcRecommendation');
+        const errorMessageEl = document.getElementById('errorMessage');
+        const healthyWeightRangeEl = document.getElementById('healthyWeightRange');
+        const imcMarker = document.getElementById('imcMarker');
+
+        let currentUnit = 'metric';
+
+        metricBtn.addEventListener('click', () => {
+            currentUnit = 'metric';
+            metricBtn.classList.replace('tab-inactive', 'tab-active');
+            imperialBtn.classList.replace('tab-active', 'tab-inactive');
+            metricInputs.classList.remove('hidden');
+            imperialInputs.classList.add('hidden');
+        });
+
+        imperialBtn.addEventListener('click', () => {
+            currentUnit = 'imperial';
+            imperialBtn.classList.replace('tab-inactive', 'tab-active');
+            metricBtn.classList.replace('tab-active', 'tab-inactive');
+            imperialInputs.classList.remove('hidden');
+            metricInputs.classList.add('hidden');
+        });
+
+        calculateBtn.addEventListener('click', () => {
+            let imc = 0;
+            let heightInMeters = 0;
+            const activityLevel = activityLevelSelect.value;
+
+            resultDiv.classList.replace('result-visible', 'result-hidden');
+            errorMessageEl.textContent = '';
+            
+            if (currentUnit === 'metric') {
+                const weight = parseFloat(weightKgInput.value);
+                const height = parseFloat(heightMInput.value);
+                if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+                    errorMessageEl.textContent = 'Por favor, introduce un peso y altura válidos.';
+                    resultDiv.classList.replace('result-hidden', 'result-visible');
+                    return;
+                }
+                imc = weight / (height * height);
+                heightInMeters = height;
+            } else { // Imperial
+                const weight = parseFloat(weightLbInput.value);
+                const feet = parseFloat(heightFtInput.value);
+                const inches = parseFloat(heightInInput.value);
+                if (isNaN(weight) || isNaN(feet) || isNaN(inches) || weight <= 0 || (feet <= 0 && inches <= 0)) {
+                    errorMessageEl.textContent = 'Por favor, introduce peso y altura válidos.';
+                    resultDiv.classList.replace('result-hidden', 'result-visible');
+                    return;
+                }
+                const totalInches = (feet * 12) + inches;
+                imc = (weight / (totalInches * totalInches)) * 703;
+                heightInMeters = totalInches * 0.0254;
+            }
+            
+            displayResults(imc, heightInMeters, currentUnit, activityLevel);
+        });
+
+        function displayResults(imc, heightInMeters, unit, activityLevel) {
+            const imcRounded = imc.toFixed(1);
+            imcValueEl.textContent = imcRounded;
+
+            let category = '', categoryClass = '', interpretation = '', recommendation = '';
+
+            if (imc < 18.5) {
+                category = 'Bajo peso';
+                categoryClass = 'bg-blue-100 text-blue-800';
+                interpretation = 'Tu IMC indica que tu peso podría ser bajo para tu altura. Esto requiere atención, especialmente si mantienes un nivel de actividad alto.';
+                if (activityLevel === 'moderate' || activityLevel === 'active') {
+                    recommendation = 'Siendo una persona activa, es crucial descartar un déficit energético (RED-S). Te recomiendo encarecidamente que consultes con un nutricionista deportivo para asegurar que tu ingesta calórica apoya tu nivel de entrenamiento y salud.';
+                } else {
+                    recommendation = 'Te sugiero consultar con un nutricionista para crear un plan de alimentación que te ayude a alcanzar un peso saludable. Acompañarlo con entrenamiento de fuerza ligero puede ser muy beneficioso para construir masa muscular.';
+                }
+            } else if (imc >= 18.5 && imc < 25) {
+                category = 'Peso saludable';
+                categoryClass = 'bg-green-100 text-green-800';
+                interpretation = '¡Felicidades! Tu IMC se encuentra en el rango considerado saludable. Ahora, veamos cómo tu actividad física potencia este resultado.';
+                if (activityLevel === 'sedentary') {
+                    recommendation = 'Este es un excelente punto de partida. Para optimizar tu salud, te animo a incorporar entrenamiento de fuerza 2-3 veces por semana. Esto mejorará tu composición corporal (más músculo, menos grasa) y tu salud metabólica, incluso sin cambiar de peso.';
+                } else {
+                    recommendation = '¡Fantástico trabajo! Combinas un peso saludable con un estilo de vida activo. Para seguir progresando, enfócate en la nutrición para maximizar tu rendimiento y recuperación. La constancia es tu mejor aliada.';
+                }
+            } else if (imc >= 25 && imc < 30) {
+                category = 'Sobrepeso';
+                categoryClass = 'bg-yellow-100 text-yellow-800';
+                interpretation = 'Tu IMC se encuentra en el rango de sobrepeso. Es importante considerar que, para personas activas, este valor puede deberse a una mayor masa muscular y no necesariamente a un exceso de grasa.';
+                if (activityLevel === 'sedentary' || activityLevel === 'light') {
+                    recommendation = 'Este es el momento perfecto para actuar. Te recomiendo combinar un déficit calórico moderado, priorizando proteínas y vegetales, con un aumento de tu actividad física. El entrenamiento de fuerza es clave para acelerar tu metabolismo.';
+                } else {
+                     recommendation = 'Dado que ya eres una persona activa, el IMC podría no ser tu mejor indicador. Te sugiero enfocarte en otros marcadores como el porcentaje de grasa corporal o las medidas de cintura. Un ajuste en tu plan nutricional podría ser la clave para optimizar tu composición corporal.';
+                }
+            } else {
+                category = 'Obesidad';
+                categoryClass = 'bg-red-100 text-red-800';
+                interpretation = 'Tu IMC se encuentra en el rango de obesidad, lo cual, según la ciencia, está asociado a mayores riesgos para la salud. Tomar conciencia es el primer y más valiente paso.';
+                if (activityLevel === 'sedentary' || activityLevel === 'light') {
+                    recommendation = 'La recomendación más importante es que consultes a un médico para crear un plan seguro. El objetivo inicial será incorporar movimiento de bajo impacto (caminar, nadar) y realizar cambios nutricionales sostenibles. Cada pequeño paso cuenta.';
+                } else {
+                    recommendation = 'Es muy positivo que te mantengas activo. Para abordar un IMC en este rango, es crucial que un médico y un nutricionista supervisen tu plan. Ellos te ayudarán a combinar de forma segura tu entrenamiento con la estrategia nutricional adecuada para tu salud.';
+                }
+            }
+            
+            imcCategoryEl.textContent = category;
+            imcCategoryEl.className = 'text-lg font-medium rounded-full px-4 py-1 inline-block ' + categoryClass;
+            imcInterpretationEl.textContent = interpretation;
+            imcRecommendationEl.textContent = recommendation;
+            
+            const lowerBoundKg = 18.5 * (heightInMeters * heightInMeters);
+            const upperBoundKg = 24.9 * (heightInMeters * heightInMeters);
+            
+            if (unit === 'metric') {
+                healthyWeightRangeEl.textContent = `Entre ${lowerBoundKg.toFixed(1)} kg y ${upperBoundKg.toFixed(1)} kg.`;
+            } else {
+                const lowerBoundLb = lowerBoundKg * 2.20462;
+                const upperBoundLb = upperBoundKg * 2.20462;
+                healthyWeightRangeEl.textContent = `Entre ${lowerBoundLb.toFixed(0)} lb y ${upperBoundLb.toFixed(0)} lb.`;
+            }
+
+            const minImc = 15;
+            const maxImc = 35;
+            let percent = ((imcRounded - minImc) / (maxImc - minImc)) * 100;
+            percent = Math.max(1, Math.min(99, percent));
+            
+            setTimeout(() => {
+               imcMarker.style.left = `${percent}%`;
+            }, 100);
+
+            resultDiv.classList.replace('result-hidden', 'result-visible');
+        }
+    </script>
+</body>
+</html>
