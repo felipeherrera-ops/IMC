@@ -57,6 +57,9 @@
             padding-top: 1rem;
             padding-bottom: 1rem;
         }
+        .mobile-menu {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200">
@@ -65,17 +68,30 @@
     <header class="bg-gray-900/70 backdrop-blur-sm shadow-lg shadow-black/20 sticky top-0 z-50">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="text-3xl font-black text-amber-400 text-glow tracking-wider">MAKIALISTER</div>
-            <div>
+            <div class="hidden md:flex items-center space-x-2">
                 <a href="#about" class="text-gray-300 hover:text-amber-400 font-semibold px-4 py-2 transition">Sobre Mí</a>
                 <a href="#services" class="text-gray-300 hover:text-amber-400 font-semibold px-4 py-2 transition">Mi Método</a>
                 <a href="#ebooks" class="text-gray-300 hover:text-amber-400 font-semibold px-4 py-2 transition">Ebooks</a>
                 <a href="#testimonials" class="text-gray-300 hover:text-amber-400 font-semibold px-4 py-2 transition">Resultados</a>
                 <a href="https://wa.me/573118460138" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-gray-900 font-bold py-2 px-5 rounded-lg hover:bg-amber-400 transition transform hover:scale-105">CONTACTO</a>
             </div>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-white focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
         </nav>
+         <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-900/90 backdrop-blur-sm absolute top-full left-0 w-full mobile-menu">
+            <a href="#about" class="block text-center text-gray-300 hover:text-amber-400 font-semibold py-4 transition border-b border-gray-800">Sobre Mí</a>
+            <a href="#services" class="block text-center text-gray-300 hover:text-amber-400 font-semibold py-4 transition border-b border-gray-800">Mi Método</a>
+            <a href="#ebooks" class="block text-center text-gray-300 hover:text-amber-400 font-semibold py-4 transition border-b border-gray-800">Ebooks</a>
+            <a href="#testimonials" class="block text-center text-gray-300 hover:text-amber-400 font-semibold py-4 transition border-b border-gray-800">Resultados</a>
+            <a href="https://wa.me/573118460138" target="_blank" rel="noopener noreferrer" class="block text-center bg-amber-500 text-gray-900 font-bold py-4 transition">CONTACTO</a>
+        </div>
     </header>
 
-    <main class="container mx-auto px-6 py-16">
+    <main class="container mx-auto px-6 py-12 md:py-16">
         <!-- Hero Section -->
         <section class="text-center">
             <img src="https://i.imgur.com/exJyRBI.jpeg" alt="Foto de Makialister" class="w-32 h-32 mx-auto rounded-full border-4 border-amber-500 shadow-lg shadow-amber-500/20 object-cover">
@@ -84,9 +100,9 @@
         </section>
 
         <!-- Calculadora -->
-        <div class="mt-16 w-full max-w-3xl mx-auto bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl shadow-2xl shadow-black/40 p-8">
+        <div class="mt-16 w-full max-w-3xl mx-auto bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl shadow-2xl shadow-black/40 p-6 md:p-8">
             <div class="text-center">
-                <h2 class="text-3xl font-bold text-amber-400 text-glow">Tu Diagnóstico Biométrico GRATUITO</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-amber-400 text-glow">Tu Diagnóstico Biométrico GRATUITO</h2>
                 <p class="mt-3 text-gray-400 max-w-2xl mx-auto">Porque tu bienestar es mi prioridad, te ofrezco este panel de datos sin costo. Obtén GRATIS tu cálculo de IMC, Tasa Metabólica Basal (TMB), Gasto Energético Diario (GEDT) y tu objetivo de hidratación. Es el punto de partida que mis competidores te cobrarían.</p>
             </div>
 
@@ -164,19 +180,19 @@
                     <div class="grid grid-cols-2 gap-4 text-center">
                         <div class="bg-gray-700 p-4 rounded-lg">
                             <p class="text-sm text-gray-400">IMC</p>
-                            <p id="imcValue" class="text-4xl font-bold text-amber-400 text-glow"></p>
+                            <p id="imcValue" class="text-3xl md:text-4xl font-bold text-amber-400 text-glow"></p>
                         </div>
                         <div class="bg-gray-700 p-4 rounded-lg">
                              <p class="text-sm text-gray-400">Hidratación Diaria</p>
-                            <p id="waterIntake" class="text-4xl font-bold text-amber-400 text-glow"></p>
+                            <p id="waterIntake" class="text-3xl md:text-4xl font-bold text-amber-400 text-glow"></p>
                         </div>
                          <div class="bg-gray-700 p-4 rounded-lg">
                              <p class="text-sm text-gray-400">Metabolismo Basal (TMB)</p>
-                            <p id="bmrValue" class="text-4xl font-bold text-amber-400 text-glow"></p>
+                            <p id="bmrValue" class="text-3xl md:text-4xl font-bold text-amber-400 text-glow"></p>
                         </div>
                          <div class="bg-gray-700 p-4 rounded-lg">
                              <p class="text-sm text-gray-400">Gasto Energético (GEDT)</p>
-                            <p id="tdeeValue" class="text-4xl font-bold text-amber-400 text-glow"></p>
+                            <p id="tdeeValue" class="text-3xl md:text-4xl font-bold text-amber-400 text-glow"></p>
                         </div>
                     </div>
 
@@ -200,14 +216,14 @@
         
         <!-- About Section -->
         <section id="about" class="mt-24 bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-8 md:p-12">
-            <div class="grid md:grid-cols-5 gap-12 items-center">
+            <div class="grid md:grid-cols-5 gap-8 md:gap-12 items-center">
                 <!-- Image -->
                 <div class="md:col-span-2">
                     <img src="https://i.imgur.com/exJyRBI.jpeg" alt="Foto de Makialister" class="rounded-lg shadow-2xl shadow-black/50 w-full object-cover">
                 </div>
                 <!-- Text -->
                 <div class="md:col-span-3">
-                    <h2 class="text-3xl font-bold text-white uppercase tracking-wider">CONOCE A TU COACH</h2>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white uppercase tracking-wider">CONOCE A TU COACH</h2>
                     <p class="text-amber-400 font-semibold text-xl mt-1">Ingeniería Aplicada al Alto Rendimiento</p>
                     <div class="w-24 h-1 bg-amber-500 my-6"></div>
                     <p class="text-gray-300 mb-4">
@@ -225,10 +241,43 @@
 
         <!-- Comparison Section -->
         <section id="method" class="mt-24 text-center">
-            <h2 class="text-3xl font-bold text-white uppercase tracking-wider">LA VENTAJA MAKIALISTER</h2>
+            <h2 class="text-2xl md:text-3xl font-bold text-white uppercase tracking-wider">LA VENTAJA MAKIALISTER</h2>
             <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-400">Por qué un sistema de ingeniería supera siempre al método convencional.</p>
             <div class="mt-12 max-w-4xl mx-auto bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 overflow-hidden">
-                <table class="w-full text-left comparison-table">
+                <div class="md:hidden">
+                    <div class="p-4 bg-gray-900">
+                        <h3 class="text-xl font-bold text-amber-400">EL MÉTODO MAKIALISTER</h3>
+                    </div>
+                    <div class="p-4 border-b border-gray-700">
+                        <p class="text-green-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Basado en Datos y Biometría</p>
+                    </div>
+                    <div class="p-4 border-b border-gray-700">
+                        <p class="text-green-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Optimización de Cada Repetición</p>
+                    </div>
+                    <div class="p-4 border-b border-gray-700">
+                         <p class="text-green-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Planes Hiper-Personalizados</p>
+                    </div>
+                     <div class="p-4">
+                        <p class="text-green-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Máxima Eficiencia</p>
+                    </div>
+
+                     <div class="p-4 bg-gray-900 mt-4">
+                        <h3 class="text-xl font-bold text-gray-500">COACHING CONVENCIONAL</h3>
+                    </div>
+                    <div class="p-4 border-b border-gray-700">
+                        <p class="text-red-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>Basado en Suposiciones</p>
+                    </div>
+                     <div class="p-4 border-b border-gray-700">
+                        <p class="text-red-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>Volumen sin Sentido</p>
+                    </div>
+                     <div class="p-4 border-b border-gray-700">
+                        <p class="text-red-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>Planes Genéricos "Copy-Paste"</p>
+                    </div>
+                     <div class="p-4">
+                        <p class="text-red-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>Esfuerzo Desperdiciado</p>
+                    </div>
+                </div>
+                <table class="w-full text-left comparison-table hidden md:table">
                     <thead>
                         <tr class="bg-gray-900">
                             <th class="p-4 text-xl font-bold text-amber-400 w-1/2">EL MÉTODO MAKIALISTER (INGENIERÍA)</th>
@@ -260,7 +309,7 @@
         <!-- Services Section -->
         <section id="services" class="mt-24">
             <div class="text-center">
-                <h2 class="text-3xl font-bold text-white uppercase tracking-wider">Mi Sistema de Coaching Integral</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-white uppercase tracking-wider">Mi Sistema de Coaching Integral</h2>
                 <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-400">Con más de 8 años entrenando y 5 años transformando físicos, he desarrollado un sistema completo que te ahorra tiempo, evita errores y maximiza cada gota de tu esfuerzo.</p>
             </div>
             <div class="mt-12 grid md:grid-cols-2 gap-8">
@@ -293,7 +342,7 @@
         
         <!-- Testimonials Section -->
         <section id="testimonials" class="mt-24">
-             <h2 class="text-3xl font-bold text-white text-center uppercase tracking-wider">Resultados Reales. Cero Exageraciones.</h2>
+             <h2 class="text-2xl md:text-3xl font-bold text-white text-center uppercase tracking-wider">Resultados Reales. Cero Exageraciones.</h2>
              <div class="mt-12 grid md:grid-cols-2 gap-8">
                  <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-lg border border-gray-700">
                     <div class="flex items-center mb-4">
@@ -326,11 +375,11 @@
 
         <!-- Ebooks Section -->
         <section id="ebooks" class="mt-24 text-center">
-            <h2 class="text-3xl font-bold text-white uppercase tracking-wider">ELEVA TU CONOCIMIENTO: MI BIBLIOTECA DE EBOOKS</h2>
+            <h2 class="text-2xl md:text-3xl font-bold text-white uppercase tracking-wider">ELEVA TU CONOCIMIENTO: MI BIBLIOTECA DE EBOOKS</h2>
             <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-400">El conocimiento es poder. Estos manuales son el complemento teórico a tu transformación práctica, destilando años de experiencia en guías directas y aplicables.</p>
             <div class="mt-12">
                  <a href="https://payhip.com/builder/public" target="_blank" rel="noopener noreferrer" class="inline-block bg-amber-500 text-gray-900 font-bold py-4 px-8 rounded-lg hover:bg-amber-400 transition transform hover:scale-105 text-lg">
-                    EXPLORAR CATÁLOGO COMPLETO DE EBOOKS
+                    EXPLORAR CATÁLOGO COMPLETO
                 </a>
             </div>
         </section>
@@ -351,7 +400,19 @@
 
 
     <script>
-        // All JavaScript remains the same, no changes needed for this update
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
         const metricBtn = document.getElementById('metricBtn');
         const imperialBtn = document.getElementById('imperialBtn');
         const metricInputs = document.getElementById('metricInputs');
@@ -368,7 +429,6 @@
         const activityLevelSelect = document.getElementById('activityLevel');
 
         const resultDiv = document.getElementById('result');
-        const leadCaptureDiv = document.getElementById('leadCapture');
         const imcValueEl = document.getElementById('imcValue');
         const imcCategoryEl = document.getElementById('imcCategory');
         const imcInterpretationEl = document.getElementById('imcInterpretation');
@@ -406,7 +466,6 @@
             const activityLevel = activityLevelSelect.value;
 
             resultDiv.classList.replace('section-visible', 'section-hidden');
-            if(leadCaptureDiv) leadCaptureDiv.classList.replace('section-visible', 'section-hidden');
             errorMessageEl.textContent = '';
             
             if (currentUnit === 'metric') {
@@ -433,15 +492,13 @@
                 weightInKg = weight * 0.453592;
             }
             
-            // BMR Calculation (Mifflin-St Jeor Equation)
             let bmr = 0;
             if (gender === 'male') {
                 bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * age + 5;
-            } else { // female
+            } else { 
                 bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * age - 161;
             }
 
-            // TDEE Calculation
             const activityMultipliers = {
                 sedentary: 1.2,
                 light: 1.375,
@@ -460,7 +517,6 @@
 
             let category = '', categoryClass = '', interpretation = '', recommendation = '';
 
-            // Updated styling for new theme
             if (imc < 18.5) {
                 category = 'Bajo peso';
                 categoryClass = 'bg-blue-900 text-blue-300 border border-blue-500';
@@ -496,33 +552,15 @@
             imcInterpretationEl.textContent = interpretation;
             imcRecommendationEl.textContent = recommendation;
             
-            // Calculate and display water intake
             const waterIntakeLiters = (weightInKg * 35) / 1000;
             waterIntakeEl.textContent = `${waterIntakeLiters.toFixed(1)} L`;
 
-            // Display BMR and TDEE
             bmrValueEl.textContent = `${bmr.toFixed(0)} kcal`;
             tdeeValueEl.textContent = `${tdee.toFixed(0)} kcal`;
 
             resultDiv.classList.replace('section-hidden', 'section-visible');
-            
-            const leadCaptureDiv = document.getElementById('leadCapture');
-            if(leadCaptureDiv) {
-                leadCaptureDiv.classList.replace('section-hidden', 'section-visible');
-            }
-
             resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
     </script>
 </body>
 </html>
-
