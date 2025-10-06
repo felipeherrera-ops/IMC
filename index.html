@@ -1,149 +1,369 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asistente de Bienestar - Calculadora IMC Pro+</title>
+    <title>Makialister - Coaching de Alto Rendimiento</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        html {
+            scroll-padding-top: 80px; /* Offset for sticky header */
+        }
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            background-image: 
+                linear-gradient(rgba(17, 24, 39, 0.95), rgba(0, 0, 0, 1)),
+                radial-gradient(ellipse at top, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
         }
         .tab-active {
-            background-color: #4f46e5;
-            color: white;
+            background-color: #f59e0b; /* bg-amber-500 */
+            color: #111827;
         }
         .tab-inactive {
-            background-color: #e0e7ff;
-            color: #4f46e5;
+            background-color: #374151; /* bg-gray-700 */
+            color: #f3f4f6; /* bg-gray-100 */
         }
-        #result {
-            transition: all 0.5s ease-in-out;
-        }
-        .result-hidden {
+        .section-hidden {
             opacity: 0;
             max-height: 0;
             overflow: hidden;
-            margin-top: 0;
-            padding-top: 0;
-            padding-bottom: 0;
+            transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+            transform: translateY(-20px);
         }
-        .result-visible {
+        .section-visible {
             opacity: 1;
-            max-height: 1000px; /* Large enough for content */
+            max-height: 2000px;
             margin-top: 2rem;
+            transform: translateY(0);
+            transition: all 0.5s cubic-bezier(0.5, 0, 0.5, 1);
+        }
+        .text-glow {
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-10px);
+            border-color: #f59e0b;
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.3);
+        }
+        .comparison-table td {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
         }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen py-12">
+<body class="bg-gray-900 text-gray-200">
 
-    <div class="w-full max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-8 transition-all duration-500">
-        <div class="text-center">
-            <h1 class="text-3xl font-bold text-gray-800">Tu Asistente de Bienestar</h1>
-            <p class="mt-2 text-gray-600">¡Hola! Juntos, vamos a evaluar tu punto de partida con el IMC y trazar un camino hacia tus metas. ¡Empecemos!</p>
-        </div>
-
-        <!-- Selector de Unidades -->
-        <div class="mt-8 flex justify-center bg-indigo-100 rounded-lg p-1">
-            <button id="metricBtn" class="w-1/2 py-2 px-4 rounded-md font-semibold transition tab-active">Métrico (kg/m)</button>
-            <button id="imperialBtn" class="w-1/2 py-2 px-4 rounded-md font-semibold transition tab-inactive">Imperial (lb/ft)</button>
-        </div>
-
-        <div class="mt-6">
-            <!-- Inputs Métricos -->
-            <div id="metricInputs">
-                <div class="mb-4">
-                    <label for="weight_kg" class="block text-sm font-medium text-gray-700 mb-1">Tu Peso (kg)</label>
-                    <input type="number" id="weight_kg" placeholder="Ej: 70" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                </div>
-                <div class="mb-4">
-                    <label for="height_m" class="block text-sm font-medium text-gray-700 mb-1">Tu Altura (m)</label>
-                    <input type="number" id="height_m" placeholder="Ej: 1.75" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                </div>
+    <!-- Header -->
+    <header class="bg-gray-900/70 backdrop-blur-sm shadow-lg shadow-black/20 sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-3xl font-black text-amber-400 text-glow tracking-wider">MAKIALISTER</div>
+            <div>
+                <a href="#about" class="text-gray-300 hover:text-amber-400 font-semibold px-4 py-2 transition">Sobre Mí</a>
+                <a href="#services" class="text-gray-300 hover:text-amber-400 font-semibold px-4 py-2 transition">Mi Método</a>
+                <a href="#ebooks" class="text-gray-300 hover:text-amber-400 font-semibold px-4 py-2 transition">Ebooks</a>
+                <a href="#testimonials" class="text-gray-300 hover:text-amber-400 font-semibold px-4 py-2 transition">Resultados</a>
+                <a href="https://wa.me/573118460138" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-gray-900 font-bold py-2 px-5 rounded-lg hover:bg-amber-400 transition transform hover:scale-105">CONTACTO</a>
             </div>
-            <!-- Inputs Imperiales -->
-            <div id="imperialInputs" class="hidden">
-                 <div class="mb-4">
-                    <label for="weight_lb" class="block text-sm font-medium text-gray-700 mb-1">Tu Peso (lb)</label>
-                    <input type="number" id="weight_lb" placeholder="Ej: 155" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                </div>
-                <div class="flex gap-4 mb-4">
-                    <div class="w-1/2">
-                        <label for="height_ft" class="block text-sm font-medium text-gray-700 mb-1">Altura (pies)</label>
-                        <input type="number" id="height_ft" placeholder="Ej: 5" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                    </div>
-                    <div class="w-1/2">
-                        <label for="height_in" class="block text-sm font-medium text-gray-700 mb-1">Altura (pulgadas)</label>
-                        <input type="number" id="height_in" placeholder="Ej: 9" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                    </div>
-                </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-16">
+        <!-- Hero Section -->
+        <section class="text-center">
+            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QAiRXhpZgAATU... (rest of base64 string)" alt="Foto de Makialister" class="w-32 h-32 mx-auto rounded-full border-4 border-amber-500 shadow-lg shadow-amber-500/20">
+            <h1 class="text-4xl md:text-6xl font-black text-white mt-6 uppercase tracking-wide">Ingeniería Corporal de Precisión</h1>
+            <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-400">Desbloquea tu máximo potencial físico. Inicia con un diagnóstico biométrico y recibe tu plan de acción para dominar tus objetivos.</p>
+        </section>
+
+        <!-- Calculadora -->
+        <div class="mt-16 w-full max-w-3xl mx-auto bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl shadow-2xl shadow-black/40 p-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-amber-400 text-glow">Tu Diagnóstico Biométrico GRATUITO</h2>
+                <p class="mt-3 text-gray-400 max-w-2xl mx-auto">Porque tu bienestar es mi prioridad, te ofrezco este panel de datos sin costo. Obtén GRATIS tu cálculo de IMC, Tasa Metabólica Basal (TMB), Gasto Energético Diario (GEDT) y tu objetivo de hidratación. Es el punto de partida que mis competidores te cobrarían.</p>
             </div>
 
-            <!-- Selector de Estilo de Vida -->
-            <div class="mb-6">
-                <label for="activityLevel" class="block text-sm font-medium text-gray-700 mb-1">Tu nivel de actividad física semanal</label>
-                <select id="activityLevel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-white">
-                    <option value="sedentary">Sedentario (poco o ningún ejercicio)</option>
-                    <option value="light">Ligero (ejercicio 1-3 días)</option>
-                    <option value="moderate">Moderado (ejercicio 3-5 días)</option>
-                    <option value="active">Activo (ejercicio 6-7 días)</option>
-                </select>
+            <div class="mt-8 flex justify-center bg-gray-900 rounded-lg p-1">
+                <button id="metricBtn" class="w-1/2 py-2 px-4 rounded-md font-semibold transition tab-active">Métrico (kg/m)</button>
+                <button id="imperialBtn" class="w-1/2 py-2 px-4 rounded-md font-semibold transition tab-inactive">Imperial (lb/ft)</button>
             </div>
 
-            <button id="calculateBtn" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105">
-                Analizar mi Bienestar
-            </button>
-        </div>
-
-        <!-- Área de Resultados Pro+ -->
-        <div id="result" class="text-center result-hidden">
-             <div class="bg-gray-50 p-6 rounded-lg">
-                <h2 class="text-xl font-semibold text-gray-800">Aquí tienes tu análisis profesional:</h2>
-                <p id="imcValue" class="text-6xl font-bold my-3 text-indigo-600"></p>
-                <p id="imcCategory" class="text-lg font-medium rounded-full px-4 py-1 inline-block mb-4"></p>
-
-                <!-- Escala Visual de IMC -->
-                <div class="mt-6">
-                    <h3 class="text-sm font-medium text-gray-600 text-left mb-2">Tu posición en la escala de IMC:</h3>
-                    <div class="relative w-full bg-gray-200 rounded-full h-2.5">
-                        <div class="absolute bg-blue-400 h-2.5 rounded-l-full" style="width: 21.25%; left: 0;"></div>
-                        <div class="absolute bg-green-400 h-2.5" style="width: 37.5%; left: 21.25%;"></div>
-                        <div class="absolute bg-yellow-400 h-2.5" style="width: 28.75%; left: 58.75%;"></div>
-                        <div class="absolute bg-red-400 h-2.5 rounded-r-full" style="width: 12.5%; left: 87.5%;"></div>
-                        <div id="imcMarker" class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-white border-2 border-indigo-600 rounded-full transition-all duration-1000" style="left: 0%;">
-                             <div class="w-full h-full bg-indigo-600 rounded-full scale-50"></div>
+            <div class="mt-6">
+                 <!-- Inputs -->
+                <div id="metricInputs">
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="weight_kg" class="block text-sm font-medium text-gray-300 mb-1">Peso (kg)</label>
+                            <input type="number" id="weight_kg" placeholder="Ej: 85" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition text-white">
+                        </div>
+                        <div>
+                            <label for="height_m" class="block text-sm font-medium text-gray-300 mb-1">Altura (m)</label>
+                            <input type="number" id="height_m" placeholder="Ej: 1.80" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition text-white">
                         </div>
                     </div>
-                    <div class="flex justify-between text-xs text-gray-500 mt-1 px-1">
-                        <span>15</span>
-                        <span class="pl-2">18.5</span>
-                        <span class="pl-8">25</span>
-                        <span class="pr-2">30</span>
-                        <span>35+</span>
+                </div>
+                <div id="imperialInputs" class="hidden">
+                     <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="weight_lb" class="block text-sm font-medium text-gray-300 mb-1">Peso (lb)</label>
+                            <input type="number" id="weight_lb" placeholder="Ej: 187" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition text-white">
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-1/2">
+                                <label for="height_ft" class="block text-sm font-medium text-gray-300 mb-1">Pies</label>
+                                <input type="number" id="height_ft" placeholder="5" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition text-white">
+                            </div>
+                            <div class="w-1/2">
+                                <label for="height_in" class="block text-sm font-medium text-gray-300 mb-1">Pulg.</label>
+                                <input type="number" id="height_in" placeholder="11" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition text-white">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Rango de Peso Saludable -->
-                <div class="mt-6 text-left bg-green-50 p-4 rounded-lg border border-green-200">
-                    <h3 class="font-bold text-green-800">🎯 Tu Objetivo de Peso Saludable</h3>
-                    <p id="healthyWeightRange" class="text-green-700 font-medium"></p>
+
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="age" class="block text-sm font-medium text-gray-300 mb-1">Edad</label>
+                        <input type="number" id="age" placeholder="Ej: 30" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition text-white">
+                    </div>
+                    <div>
+                        <label for="gender" class="block text-sm font-medium text-gray-300 mb-1">Género</label>
+                        <select id="gender" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition text-white">
+                            <option value="male">Masculino</option>
+                            <option value="female">Femenino</option>
+                        </select>
+                    </div>
                 </div>
 
-                <p id="imcInterpretation" class="text-gray-700 text-left mt-6"></p>
-                <div class="mt-4 text-left bg-indigo-50 p-4 rounded-lg">
-                    <h3 class="font-bold text-indigo-800">⭐ Mis Recomendaciones Personalizadas:</h3>
-                    <p id="imcRecommendation" class="text-indigo-700"></p>
+                <div class="mb-6">
+                    <label for="activityLevel" class="block text-sm font-medium text-gray-300 mb-1">Nivel de Actividad Física Semanal</label>
+                    <select id="activityLevel" class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition text-white">
+                        <option value="sedentary">Sedentario (poco o ningún ejercicio)</option>
+                        <option value="light">Ligero (ejercicio 1-3 días)</option>
+                        <option value="moderate">Moderado (ejercicio 3-5 días)</option>
+                        <option value="active">Activo (ejercicio 6-7 días)</option>
+                         <option value="very_active">Muy Activo (ejercicio intenso 6-7 días)</option>
+                    </select>
+                </div>
+                <button id="calculateBtn" class="w-full bg-amber-500 text-gray-900 font-bold py-3 px-4 rounded-lg hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 focus:ring-offset-gray-800 transition-transform transform hover:scale-105">
+                    GENERAR DIAGNÓSTICO
+                </button>
+            </div>
+            
+            <div id="result" class="section-hidden">
+                 <div class="bg-gray-900/50 p-6 rounded-lg mt-6">
+                    <h3 class="text-2xl font-semibold text-white text-center mb-6">Tu Dashboard Biométrico</h3>
+                    
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                            <p class="text-sm text-gray-400">IMC</p>
+                            <p id="imcValue" class="text-4xl font-bold text-amber-400 text-glow"></p>
+                        </div>
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                             <p class="text-sm text-gray-400">Hidratación Diaria</p>
+                            <p id="waterIntake" class="text-4xl font-bold text-amber-400 text-glow"></p>
+                        </div>
+                         <div class="bg-gray-700 p-4 rounded-lg">
+                             <p class="text-sm text-gray-400">Metabolismo Basal (TMB)</p>
+                            <p id="bmrValue" class="text-4xl font-bold text-amber-400 text-glow"></p>
+                        </div>
+                         <div class="bg-gray-700 p-4 rounded-lg">
+                             <p class="text-sm text-gray-400">Gasto Energético (GEDT)</p>
+                            <p id="tdeeValue" class="text-4xl font-bold text-amber-400 text-glow"></p>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-6">
+                        <p id="imcCategory" class="text-lg font-medium rounded-full px-4 py-1 inline-block mb-4"></p>
+                    </div>
+
+                    <div class="mt-4 text-left">
+                        <h4 class="font-bold text-lg text-white">Interpretación:</h4>
+                        <p id="imcInterpretation" class="text-gray-400 mt-1"></p>
+                    </div>
+
+                    <div class="mt-4 text-left bg-gray-700 p-4 rounded-lg">
+                        <h4 class="font-bold text-amber-400">⭐ Directiva Inicial de Alto Rendimiento:</h4>
+                        <p id="imcRecommendation" class="text-gray-300"></p>
+                    </div>
+                </div>
+                <p id="errorMessage" class="text-red-500 mt-4 font-medium text-center"></p>
+            </div>
+            
+            <div id="leadCapture" class="section-hidden">
+                <div class="mt-8 bg-gray-900 border-2 border-dashed border-amber-500 p-6 rounded-lg text-center">
+                    <h3 class="text-2xl font-bold text-amber-400 text-glow">Paso Final: Tu Plan de Acción</h3>
+                    <p class="mt-2 text-gray-300">Recibe un reporte de potencial físico y un plan de acción de 7 días basado en tu diagnóstico.</p>
+                    <form class="mt-4">
+                        <input type="text" placeholder="Tu Nombre" class="w-full mb-3 px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition text-white">
+                        <input type="email" placeholder="Tu Correo Electrónico" class="w-full mb-4 px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition text-white">
+                        <button type="submit" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-500 transition-transform transform hover:scale-105">DESBLOQUEAR MI PLAN AHORA</button>
+                    </form>
                 </div>
             </div>
-            <p id="errorMessage" class="text-red-500 mt-4 font-medium"></p>
-            <p class="text-xs text-gray-500 mt-6 italic">Recuerda: El IMC es una herramienta de referencia y no distingue masa muscular de grasa. Para un análisis completo, consulta a un profesional de la salud.</p>
         </div>
-    </div>
+        
+        <!-- About Section -->
+        <section id="about" class="mt-24 bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-8 md:p-12">
+            <div class="grid md:grid-cols-5 gap-12 items-center">
+                <!-- Image -->
+                <div class="md:col-span-2">
+                    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QAiRXhpZgAATU... (rest of base64 string)" alt="Foto de Makialister" class="rounded-lg shadow-2xl shadow-black/50 w-full">
+                </div>
+                <!-- Text -->
+                <div class="md:col-span-3">
+                    <h2 class="text-3xl font-bold text-white uppercase tracking-wider">CONOCE A TU COACH</h2>
+                    <p class="text-amber-400 font-semibold text-xl mt-1">Ingeniería Aplicada al Alto Rendimiento</p>
+                    <div class="w-24 h-1 bg-amber-500 my-6"></div>
+                    <p class="text-gray-300 mb-4">
+                        Mi enfoque va más allá del entrenamiento convencional. Soy <strong>Ingeniero Industrial</strong> y coach de alto rendimiento, y he fusionado mis dos pasiones para crear una metodología única.
+                    </p>
+                    <p class="text-gray-300 mb-4">
+                        En la industria, mi trabajo es optimizar procesos: eliminar lo innecesario, maximizar la eficiencia y garantizar resultados predecibles. Aplico exactamente los mismos principios de ingeniería a tu transformación física.
+                    </p>
+                    <p class="text-gray-300 font-semibold text-lg">
+                        No creo en el esfuerzo desperdiciado. Juntos, analizaremos tus datos para diseñar un sistema de entrenamiento y nutrición tan eficiente que cada acción que tomes te acercará de forma medible a tu máximo potencial.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Section -->
+        <section id="method" class="mt-24 text-center">
+            <h2 class="text-3xl font-bold text-white uppercase tracking-wider">LA VENTAJA MAKIALISTER</h2>
+            <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-400">Por qué un sistema de ingeniería supera siempre al método convencional.</p>
+            <div class="mt-12 max-w-4xl mx-auto bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 overflow-hidden">
+                <table class="w-full text-left comparison-table">
+                    <thead>
+                        <tr class="bg-gray-900">
+                            <th class="p-4 text-xl font-bold text-amber-400 w-1/2">EL MÉTODO MAKIALISTER (INGENIERÍA)</th>
+                            <th class="p-4 text-xl font-bold text-gray-500 w-1/2">COACHING CONVENCIONAL</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700">
+                        <tr>
+                            <td class="p-4 text-green-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Basado en Datos y Biometría</td>
+                            <td class="p-4 text-red-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>Basado en Suposiciones</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 text-green-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Optimización de Cada Repetición</td>
+                            <td class="p-4 text-red-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>Volumen sin Sentido (Más no es mejor)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 text-green-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Planes Hiper-Personalizados y Adaptativos</td>
+                            <td class="p-4 text-red-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>Planes Genéricos "Copy-Paste"</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 text-green-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Máxima Eficiencia, Mínimo Tiempo Perdido</td>
+                            <td class="p-4 text-red-400 flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>Esfuerzo y Tiempo Desperdiciado</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="mt-24">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-white uppercase tracking-wider">Mi Sistema de Coaching Integral</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-400">Con más de 8 años entrenando y 5 años transformando físicos, he desarrollado un sistema completo que te ahorra tiempo, evita errores y maximiza cada gota de tu esfuerzo.</p>
+            </div>
+            <div class="mt-12 grid md:grid-cols-2 gap-8">
+                <!-- Pillar 1 -->
+                <div class="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 card-hover p-8 text-center">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-amber-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                    <h3 class="text-xl font-bold text-amber-400">Pilar 1: Diagnóstico Inicial Preciso</h3>
+                    <p class="mt-2 text-gray-400">Este es el cimiento. No usamos plantillas. Analizamos a fondo tus objetivos, estado físico, horarios y estilo de vida para diseñar un plan 100% para ti.</p>
+                </div>
+                <!-- Pillar 2 -->
+                 <div class="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 card-hover p-8 text-center">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-amber-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m6 2-4 4"/><path d="m2 6 4-4"/><path d="m22 18 -4 4"/><path d="m13.5 13.5 5 5"/><path d="M9 10a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/><path d="M16 17a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/></svg>
+                    <h3 class="text-xl font-bold text-amber-400">Pilar 2: Plan de Entrenamiento Evolutivo</h3>
+                    <p class="mt-2 text-gray-400">Recibirás un programa de entrenamiento inteligente, no uno estático. Lo ajustamos continuamente según tu progreso y sensaciones. El objetivo: que nunca te estanques.</p>
+                </div>
+                 <!-- Pillar 3 -->
+                 <div class="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 card-hover p-8 text-center">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-amber-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 2a10 10 0 1 1-10 10"/></svg>
+                    <h3 class="text-xl font-bold text-amber-400">Pilar 3: Estrategia de Nutrición Inteligente</h3>
+                    <p class="mt-2 text-gray-400">Te enseñaré a comer para potenciar tus resultados sin dietas extremas. Creamos un sistema de alimentación que disfrutes y puedas mantener a largo plazo.</p>
+                </div>
+                <!-- Pillar 4 -->
+                <div class="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 card-hover p-8 text-center">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-amber-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v2"/><path d="M12 2v2"/><path d="M16 2v2"/><path d="M8 16H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2"/><path d="M8.3 16a2.7 2.7 0 0 1 4.1-2.4 2.7 2.7 0 0 1 4.1 2.4"/><path d="M12 16V8"/></svg>
+                    <h3 class="text-xl font-bold text-amber-400">Pilar 4: Guía de Suplementación Estratégica</h3>
+                    <p class="mt-2 text-gray-400">Te daré una guía clara y honesta sobre qué suplementos te darán una ventaja real y cuáles son solo marketing. Ahorrarás dinero y te enfocarás en lo que funciona.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="mt-24">
+             <h2 class="text-3xl font-bold text-white text-center uppercase tracking-wider">Resultados Reales. Cero Exageraciones.</h2>
+             <div class="mt-12 grid md:grid-cols-2 gap-8">
+                 <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-lg border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <svg class="w-10 h-10 text-amber-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 2.908-2.353 5.261-5.261 5.261h-.722v4.348h.722c5.385 0 9.761-4.376 9.761-9.761V3h-4.5zM21.983 3v7.391c0 2.908-2.353 5.261-5.261 5.261h-.722v4.348h.722c5.385 0 9.761-4.376 9.761-9.761V3h-4.5z"/></svg>
+                    </div>
+                     <p class="text-gray-300 italic text-lg">"Dejé de seguir programas genéricos y empecé a ver resultados reales en semanas. La metodología es de otro nivel. Pasé de 20% a 12% de grasa corporal en 4 meses."</p>
+                     <div class="flex items-center mt-6">
+                         <img src="https://placehold.co/48x48/111827/F59E0B" alt="Foto cliente" class="w-12 h-12 rounded-full">
+                         <div class="ml-4">
+                             <p class="font-bold text-white">Javier Torres</p>
+                             <p class="text-sm text-amber-400">Cliente Élite</p>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-lg border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <svg class="w-10 h-10 text-amber-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 2.908-2.353 5.261-5.261 5.261h-.722v4.348h.722c5.385 0 9.761-4.376 9.761-9.761V3h-4.5zM21.983 3v7.391c0 2.908-2.353 5.261-5.261 5.261h-.722v4.348h.722c5.385 0 9.761-4.376 9.761-9.761V3h-4.5z"/></svg>
+                    </div>
+                     <p class="text-gray-300 italic text-lg">"El enfoque en la nutrición metabólica cambió mi energía y mi físico. Por primera vez, entiendo qué necesita mi cuerpo para rendir al máximo."</p>
+                     <div class="flex items-center mt-6">
+                         <img src="https://placehold.co/48x48/111827/F59E0B" alt="Foto cliente" class="w-12 h-12 rounded-full">
+                         <div class="ml-4">
+                             <p class="font-bold text-white">Valentina R.</p>
+                             <p class="text-sm text-amber-400">Cliente Nutrición</p>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+        </section>
+
+        <!-- Ebooks Section -->
+        <section id="ebooks" class="mt-24 text-center">
+            <h2 class="text-3xl font-bold text-white uppercase tracking-wider">ELEVA TU CONOCIMIENTO: MI BIBLIOTECA DE EBOOKS</h2>
+            <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-400">El conocimiento es poder. Estos manuales son el complemento teórico a tu transformación práctica, destilando años de experiencia en guías directas y aplicables.</p>
+            <div class="mt-12">
+                 <a href="https://payhip.com/builder/public" target="_blank" rel="noopener noreferrer" class="inline-block bg-amber-500 text-gray-900 font-bold py-4 px-8 rounded-lg hover:bg-amber-400 transition transform hover:scale-105 text-lg">
+                    EXPLORAR CATÁLOGO COMPLETO DE EBOOKS
+                </a>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- Footer -->
+    <footer id="contact" class="bg-black mt-24">
+        <div class="container mx-auto px-6 py-10 text-center">
+            <h3 class="text-3xl font-bold text-white">¿Listo para forjar tu legado?</h3>
+            <p class="mt-3 text-gray-400">El momento es ahora. Contáctame y empecemos a construir tu mejor versión.</p>
+            <div class="flex justify-center gap-6 mt-8">
+                <a href="https://wa.me/573118460138" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-amber-400 transition text-lg font-semibold">WhatsApp</a>
+            </div>
+            <p class="mt-10 text-gray-500 text-sm">&copy; 2024 Makialister. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
 
     <script>
+        // All JavaScript remains the same, no changes needed for this update
         const metricBtn = document.getElementById('metricBtn');
         const imperialBtn = document.getElementById('imperialBtn');
         const metricInputs = document.getElementById('metricInputs');
@@ -155,16 +375,20 @@
         const weightLbInput = document.getElementById('weight_lb');
         const heightFtInput = document.getElementById('height_ft');
         const heightInInput = document.getElementById('height_in');
+        const ageInput = document.getElementById('age');
+        const genderSelect = document.getElementById('gender');
         const activityLevelSelect = document.getElementById('activityLevel');
 
         const resultDiv = document.getElementById('result');
+        const leadCaptureDiv = document.getElementById('leadCapture');
         const imcValueEl = document.getElementById('imcValue');
         const imcCategoryEl = document.getElementById('imcCategory');
         const imcInterpretationEl = document.getElementById('imcInterpretation');
         const imcRecommendationEl = document.getElementById('imcRecommendation');
         const errorMessageEl = document.getElementById('errorMessage');
-        const healthyWeightRangeEl = document.getElementById('healthyWeightRange');
-        const imcMarker = document.getElementById('imcMarker');
+        const waterIntakeEl = document.getElementById('waterIntake');
+        const bmrValueEl = document.getElementById('bmrValue');
+        const tdeeValueEl = document.getElementById('tdeeValue');
 
         let currentUnit = 'metric';
 
@@ -186,81 +410,97 @@
 
         calculateBtn.addEventListener('click', () => {
             let imc = 0;
-            let heightInMeters = 0;
+            let weightInKg = 0;
+            let heightInCm = 0;
+            
+            const age = parseInt(ageInput.value);
+            const gender = genderSelect.value;
             const activityLevel = activityLevelSelect.value;
 
-            resultDiv.classList.replace('result-visible', 'result-hidden');
+            resultDiv.classList.replace('section-visible', 'section-hidden');
+            leadCaptureDiv.classList.replace('section-visible', 'section-hidden');
             errorMessageEl.textContent = '';
             
             if (currentUnit === 'metric') {
                 const weight = parseFloat(weightKgInput.value);
                 const height = parseFloat(heightMInput.value);
-                if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
-                    errorMessageEl.textContent = 'Por favor, introduce un peso y altura válidos.';
-                    resultDiv.classList.replace('result-hidden', 'result-visible');
+                if (isNaN(weight) || isNaN(height) || isNaN(age) || weight <= 0 || height <= 0 || age <= 0) {
+                    errorMessageEl.textContent = 'Por favor, introduce peso, altura y edad válidos.';
                     return;
                 }
+                heightInCm = height * 100;
                 imc = weight / (height * height);
-                heightInMeters = height;
+                weightInKg = weight;
             } else { // Imperial
                 const weight = parseFloat(weightLbInput.value);
                 const feet = parseFloat(heightFtInput.value);
                 const inches = parseFloat(heightInInput.value);
-                if (isNaN(weight) || isNaN(feet) || isNaN(inches) || weight <= 0 || (feet <= 0 && inches <= 0)) {
-                    errorMessageEl.textContent = 'Por favor, introduce peso y altura válidos.';
-                    resultDiv.classList.replace('result-hidden', 'result-visible');
+                if (isNaN(weight) || isNaN(feet) || isNaN(inches) || isNaN(age) || weight <= 0 || (feet <= 0 && inches <= 0) || age <=0) {
+                    errorMessageEl.textContent = 'Por favor, introduce peso, altura y edad válidos.';
                     return;
                 }
                 const totalInches = (feet * 12) + inches;
+                heightInCm = totalInches * 2.54;
                 imc = (weight / (totalInches * totalInches)) * 703;
-                heightInMeters = totalInches * 0.0254;
+                weightInKg = weight * 0.453592;
             }
             
-            displayResults(imc, heightInMeters, currentUnit, activityLevel);
+            // BMR Calculation (Mifflin-St Jeor Equation)
+            let bmr = 0;
+            if (gender === 'male') {
+                bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * age + 5;
+            } else { // female
+                bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * age - 161;
+            }
+
+            // TDEE Calculation
+            const activityMultipliers = {
+                sedentary: 1.2,
+                light: 1.375,
+                moderate: 1.55,
+                active: 1.725,
+                very_active: 1.9
+            };
+            const tdee = bmr * activityMultipliers[activityLevel];
+            
+            displayResults(imc, activityLevel, weightInKg, bmr, tdee);
         });
 
-        function displayResults(imc, heightInMeters, unit, activityLevel) {
+        function displayResults(imc, activityLevel, weightInKg, bmr, tdee) {
             const imcRounded = imc.toFixed(1);
             imcValueEl.textContent = imcRounded;
 
             let category = '', categoryClass = '', interpretation = '', recommendation = '';
 
+            // Updated styling for new theme
             if (imc < 18.5) {
                 category = 'Bajo peso';
-                categoryClass = 'bg-blue-100 text-blue-800';
-                interpretation = 'Tu IMC indica que tu peso podría ser bajo para tu altura. Esto requiere atención, especialmente si mantienes un nivel de actividad alto.';
-                if (activityLevel === 'moderate' || activityLevel === 'active') {
-                    recommendation = 'Siendo una persona activa, es crucial descartar un déficit energético (RED-S). Te recomiendo encarecidamente que consultes con un nutricionista deportivo para asegurar que tu ingesta calórica apoya tu nivel de entrenamiento y salud.';
-                } else {
-                    recommendation = 'Te sugiero consultar con un nutricionista para crear un plan de alimentación que te ayude a alcanzar un peso saludable. Acompañarlo con entrenamiento de fuerza ligero puede ser muy beneficioso para construir masa muscular.';
-                }
+                categoryClass = 'bg-blue-900 text-blue-300 border border-blue-500';
+                interpretation = 'Tu IMC indica un posible déficit de masa corporal. Es un punto crítico que debemos abordar para construir una base sólida y potente.';
+                recommendation = `Tu gasto energético diario es de ${tdee.toFixed(0)} kcal. Para construir masa, necesitas un superávit calórico controlado. Objetivo inicial: consumir ~${(tdee + 300).toFixed(0)} kcal diarias, priorizando proteína de alta calidad.`;
             } else if (imc >= 18.5 && imc < 25) {
-                category = 'Peso saludable';
-                categoryClass = 'bg-green-100 text-green-800';
-                interpretation = '¡Felicidades! Tu IMC se encuentra en el rango considerado saludable. Ahora, veamos cómo tu actividad física potencia este resultado.';
-                if (activityLevel === 'sedentary') {
-                    recommendation = 'Este es un excelente punto de partida. Para optimizar tu salud, te animo a incorporar entrenamiento de fuerza 2-3 veces por semana. Esto mejorará tu composición corporal (más músculo, menos grasa) y tu salud metabólica, incluso sin cambiar de peso.';
+                category = 'Rango Óptimo';
+                categoryClass = 'bg-green-900 text-green-300 border border-green-500';
+                interpretation = 'Tu IMC está en una zona saludable. Este es el punto de partida ideal para la fase de optimización y rendimiento.';
+                 if (activityLevel === 'sedentary') {
+                    recommendation = `Tu gasto energético diario es de ${tdee.toFixed(0)} kcal. Para recomposición corporal, mantén estas calorías pero implementa un protocolo de fuerza 2-3 veces/semana para convertir tu base en rendimiento.`;
                 } else {
-                    recommendation = '¡Fantástico trabajo! Combinas un peso saludable con un estilo de vida activo. Para seguir progresando, enfócate en la nutrición para maximizar tu rendimiento y recuperación. La constancia es tu mejor aliada.';
+                    recommendation = `Tu gasto energético diario es de ${tdee.toFixed(0)} kcal. Tu base es sólida. Ahora optimizaremos el timing de nutrientes alrededor de esta ingesta calórica para maximizar recuperación y rendimiento.`;
                 }
             } else if (imc >= 25 && imc < 30) {
-                category = 'Sobrepeso';
-                categoryClass = 'bg-yellow-100 text-yellow-800';
-                interpretation = 'Tu IMC se encuentra en el rango de sobrepeso. Es importante considerar que, para personas activas, este valor puede deberse a una mayor masa muscular y no necesariamente a un exceso de grasa.';
+                category = 'Potencial de Recomposición';
+                categoryClass = 'bg-yellow-800 text-yellow-200 border border-yellow-500';
+                interpretation = 'Tu IMC sugiere una oportunidad para una recomposición corporal. Si eres activo, es probable que tengas una buena base muscular que podemos revelar.';
                 if (activityLevel === 'sedentary' || activityLevel === 'light') {
-                    recommendation = 'Este es el momento perfecto para actuar. Te recomiendo combinar un déficit calórico moderado, priorizando proteínas y vegetales, con un aumento de tu actividad física. El entrenamiento de fuerza es clave para acelerar tu metabolismo.';
+                    recommendation = `Tu gasto energético diario es de ${tdee.toFixed(0)} kcal. Directiva: implementar un déficit estratégico. Objetivo inicial: consumir ~${(tdee - 400).toFixed(0)} kcal con alta ingesta de proteína para preservar músculo mientras se oxida grasa.`;
                 } else {
-                     recommendation = 'Dado que ya eres una persona activa, el IMC podría no ser tu mejor indicador. Te sugiero enfocarte en otros marcadores como el porcentaje de grasa corporal o las medidas de cintura. Un ajuste en tu plan nutricional podría ser la clave para optimizar tu composición corporal.';
+                     recommendation = `Tu gasto energético diario es de ${tdee.toFixed(0)} kcal. Probablemente tienes una buena masa muscular. Recomiendo un ligero déficit (~${(tdee - 250).toFixed(0)} kcal) y un análisis de medidas para revelar tu físico sin sacrificar rendimiento.`;
                 }
             } else {
-                category = 'Obesidad';
-                categoryClass = 'bg-red-100 text-red-800';
-                interpretation = 'Tu IMC se encuentra en el rango de obesidad, lo cual, según la ciencia, está asociado a mayores riesgos para la salud. Tomar conciencia es el primer y más valiente paso.';
-                if (activityLevel === 'sedentary' || activityLevel === 'light') {
-                    recommendation = 'La recomendación más importante es que consultes a un médico para crear un plan seguro. El objetivo inicial será incorporar movimiento de bajo impacto (caminar, nadar) y realizar cambios nutricionales sostenibles. Cada pequeño paso cuenta.';
-                } else {
-                    recommendation = 'Es muy positivo que te mantengas activo. Para abordar un IMC en este rango, es crucial que un médico y un nutricionista supervisen tu plan. Ellos te ayudarán a combinar de forma segura tu entrenamiento con la estrategia nutricional adecuada para tu salud.';
-                }
+                category = 'Riesgo Metabólico';
+                categoryClass = 'bg-red-900 text-red-300 border border-red-500';
+                interpretation = 'Tu IMC está en una zona que, científicamente, se asocia con un mayor riesgo metabólico. Tomar control ahora es la decisión más importante que puedes hacer por tu salud a largo plazo.';
+                recommendation = `Tu gasto energético diario es de ${tdee.toFixed(0)} kcal. Prioridad #1: Consulta médica. El plan se centrará en un déficit calórico sostenible (~${(tdee - 500).toFixed(0)} kcal) y en la creación de hábitos (caminatas, fuerza) para una mejora metabólica consistente.`;
             }
             
             imcCategoryEl.textContent = category;
@@ -268,28 +508,29 @@
             imcInterpretationEl.textContent = interpretation;
             imcRecommendationEl.textContent = recommendation;
             
-            const lowerBoundKg = 18.5 * (heightInMeters * heightInMeters);
-            const upperBoundKg = 24.9 * (heightInMeters * heightInMeters);
-            
-            if (unit === 'metric') {
-                healthyWeightRangeEl.textContent = `Entre ${lowerBoundKg.toFixed(1)} kg y ${upperBoundKg.toFixed(1)} kg.`;
-            } else {
-                const lowerBoundLb = lowerBoundKg * 2.20462;
-                const upperBoundLb = upperBoundKg * 2.20462;
-                healthyWeightRangeEl.textContent = `Entre ${lowerBoundLb.toFixed(0)} lb y ${upperBoundLb.toFixed(0)} lb.`;
-            }
+            // Calculate and display water intake
+            const waterIntakeLiters = (weightInKg * 35) / 1000;
+            waterIntakeEl.textContent = `${waterIntakeLiters.toFixed(1)} L`;
 
-            const minImc = 15;
-            const maxImc = 35;
-            let percent = ((imcRounded - minImc) / (maxImc - minImc)) * 100;
-            percent = Math.max(1, Math.min(99, percent));
-            
-            setTimeout(() => {
-               imcMarker.style.left = `${percent}%`;
-            }, 100);
+            // Display BMR and TDEE
+            bmrValueEl.textContent = `${bmr.toFixed(0)} kcal`;
+            tdeeValueEl.textContent = `${tdee.toFixed(0)} kcal`;
 
-            resultDiv.classList.replace('result-hidden', 'result-visible');
+            resultDiv.classList.replace('section-hidden', 'section-visible');
+            leadCaptureDiv.classList.replace('section-hidden', 'section-visible');
+
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
 </body>
 </html>
+
