@@ -78,7 +78,7 @@
     <main class="container mx-auto px-6 py-16">
         <!-- Hero Section -->
         <section class="text-center">
-            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QAiRXhpZgAATU... (rest of base64 string)" alt="Foto de Makialister" class="w-32 h-32 mx-auto rounded-full border-4 border-amber-500 shadow-lg shadow-amber-500/20">
+            <img src="https://i.imgur.com/k2xH6d1.jpeg" alt="Foto de Makialister" class="w-32 h-32 mx-auto rounded-full border-4 border-amber-500 shadow-lg shadow-amber-500/20 object-cover">
             <h1 class="text-4xl md:text-6xl font-black text-white mt-6 uppercase tracking-wide">Ingeniería Corporal de Precisión</h1>
             <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-400">Desbloquea tu máximo potencial físico. Inicia con un diagnóstico biométrico y recibe tu plan de acción para dominar tus objetivos.</p>
         </section>
@@ -196,18 +196,6 @@
                 </div>
                 <p id="errorMessage" class="text-red-500 mt-4 font-medium text-center"></p>
             </div>
-            
-            <div id="leadCapture" class="section-hidden">
-                <div class="mt-8 bg-gray-900 border-2 border-dashed border-amber-500 p-6 rounded-lg text-center">
-                    <h3 class="text-2xl font-bold text-amber-400 text-glow">Paso Final: Tu Plan de Acción</h3>
-                    <p class="mt-2 text-gray-300">Recibe un reporte de potencial físico y un plan de acción de 7 días basado en tu diagnóstico.</p>
-                    <form class="mt-4">
-                        <input type="text" placeholder="Tu Nombre" class="w-full mb-3 px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition text-white">
-                        <input type="email" placeholder="Tu Correo Electrónico" class="w-full mb-4 px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition text-white">
-                        <button type="submit" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-500 transition-transform transform hover:scale-105">DESBLOQUEAR MI PLAN AHORA</button>
-                    </form>
-                </div>
-            </div>
         </div>
         
         <!-- About Section -->
@@ -215,7 +203,7 @@
             <div class="grid md:grid-cols-5 gap-12 items-center">
                 <!-- Image -->
                 <div class="md:col-span-2">
-                    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QAiRXhpZgAATU... (rest of base64 string)" alt="Foto de Makialister" class="rounded-lg shadow-2xl shadow-black/50 w-full">
+                    <img src="https://i.imgur.com/k2xH6d1.jpeg" alt="Foto de Makialister" class="rounded-lg shadow-2xl shadow-black/50 w-full object-cover">
                 </div>
                 <!-- Text -->
                 <div class="md:col-span-3">
@@ -418,7 +406,7 @@
             const activityLevel = activityLevelSelect.value;
 
             resultDiv.classList.replace('section-visible', 'section-hidden');
-            leadCaptureDiv.classList.replace('section-visible', 'section-hidden');
+            if(leadCaptureDiv) leadCaptureDiv.classList.replace('section-visible', 'section-hidden');
             errorMessageEl.textContent = '';
             
             if (currentUnit === 'metric') {
@@ -517,7 +505,11 @@
             tdeeValueEl.textContent = `${tdee.toFixed(0)} kcal`;
 
             resultDiv.classList.replace('section-hidden', 'section-visible');
-            leadCaptureDiv.classList.replace('section-hidden', 'section-visible');
+            
+            const leadCaptureDiv = document.getElementById('leadCapture');
+            if(leadCaptureDiv) {
+                leadCaptureDiv.classList.replace('section-hidden', 'section-visible');
+            }
 
             resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
